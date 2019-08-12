@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Streaming.iml" filepath="$PROJECT_DIR$/Streaming.iml" />
+      <module fileurl="file://$PROJECT_DIR$/playgrond.iml" filepath="$PROJECT_DIR$/playgrond.iml" />
     </modules>
   </component>
 </project>
