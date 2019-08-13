@@ -44,7 +44,7 @@ All test can run on a localhost
 
 ### Test Environment:  
 ```
-cd /Users/xxx/infra/kafka_2.12-2.3.0  
+cd infra/kafka_2.12-2.3.0  
 bin/zookeeper-server-start.sh config/zookeeper.properties  
 bin/kafka-server-start.sh config/server.properties  
 

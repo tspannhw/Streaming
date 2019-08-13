@@ -18,6 +18,9 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import commons.Commons;
+
+
 /**
  * className: ConsunerFlink.KafkaJoin2JsonStreams
  * trxStream: {"timestamp":1565604389166,"shop_name":0,"shop_name":"Ums Eck","cc_type":"Revolut","cc_id":"5179-5212-9764-8013","amount_orig":75.86,"fx":"CHF","fx_account":"CHF"}
@@ -29,8 +32,6 @@ import java.util.StringTokenizer;
  */
 @Slf4j
 public class KafkaCount_trx_per_shop {
-    private static final String KAFKA_BROKERS = "127.0.0.1:9092";
-
     public static void main(String[] args) throws Exception {
 
         //createRemoteEnvironment(String host, int port, String... jarFiles)
@@ -38,8 +39,8 @@ public class KafkaCount_trx_per_shop {
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
         Properties properties = new Properties();
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "md");
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_BROKERS);
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, Commons.GROUP_ID_CONFIG);
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Commons.EXAMPLE_KAFKA_SERVER);
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");

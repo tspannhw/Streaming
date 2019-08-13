@@ -1,6 +1,7 @@
 package ConsunerFlink;
 
 import com.alibaba.fastjson.JSONObject;
+import commons.Commons;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
@@ -35,8 +36,6 @@ import java.util.Properties;
  */
 @Slf4j
 public class KafkaJoin2JsonStreams {
-    private static final String KAFKA_BROKERS = "127.0.0.1:9092";
-
     public static void main(String[] args) throws Exception {
 
         final ParameterTool parameterTool = ParameterTool.fromArgs(args);
@@ -47,8 +46,8 @@ public class KafkaJoin2JsonStreams {
         env.getConfig().setGlobalJobParameters(parameterTool);
 
         Properties properties = new Properties();
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "md");
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_BROKERS);
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, Commons.GROUP_ID_CONFIG);
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Commons.EXAMPLE_KAFKA_SERVER);
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
@@ -86,7 +85,7 @@ public class KafkaJoin2JsonStreams {
 // for debugging: print out
 //        joinedString.print();
         FlinkKafkaProducer<String> myProducer = new FlinkKafkaProducer<>(
-                KAFKA_BROKERS,
+                Commons.EXAMPLE_KAFKA_SERVER,
                 "topic1",
                 new SimpleStringSchema());
 
