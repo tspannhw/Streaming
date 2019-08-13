@@ -6,7 +6,7 @@ import org.eclipse.paho.client.mqttv3.{MqttClient, MqttException, MqttMessage}
 import scala.util.Random
 
 object MQTTJsonPublisher extends App {
-  def publishToserver() = {
+  def publishToserver(): Unit = {
     println("Hey I am publishing")
     val brokerUrl = s"tcp://localhost:1883"
     val topic = "trx"
@@ -14,6 +14,7 @@ object MQTTJsonPublisher extends App {
     val persistence = new MemoryPersistence
     val transaction_card_type_list = Array("Visa", "MasterCard", "Maestro", "AMEX", "Diners Club", "Revolut")
     val transaction_currency = Array("USD", "EUR", "CHF")
+    val shop_name = Array("Tante_Emma", "Aus_der_Region", "Shop_am_Eck", "SihlCity", "BioMarkt")
 
 
     try {
@@ -26,11 +27,12 @@ object MQTTJsonPublisher extends App {
           s"""{
              | "timestamp": "${System.currentTimeMillis()}",
              | "shop_id": "${Random.nextInt(5)}",
+             | "shop_name": "${Random.shuffle(shop_name.toList).head}",
              | "cc_type": "${Random.shuffle(transaction_card_type_list.toList).head}",
              | "cc_id": "51${10 + Random.nextInt(89)}-${1000 + Random.nextInt(8999)}-${1000 + Random.nextInt(8999)}-${1000 + Random.nextInt(8999)}",
              | "amount_orig": ${Math.round((Math.random * 17000) + 100) / 100.0},
-             | "currency_orig": "${Random.shuffle(transaction_currency.toList).head}",
-             | "currency_account": "${Random.shuffle(transaction_currency.toList).head}"
+             | "fx": "${Random.shuffle(transaction_currency.toList).head}",
+             | "fx_account": "${Random.shuffle(transaction_currency.toList).head}"
              |}""".stripMargin
 
         val message = new MqttMessage(jsonmessage.getBytes("utf-8"))
@@ -47,6 +49,6 @@ object MQTTJsonPublisher extends App {
     }
   }
 
-  publishToserver
+  publishToserver()
 
 }
