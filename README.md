@@ -8,7 +8,7 @@
 ### Use cases:  
 #### Merge two data steams - trx with the latest fx rate:  
 
-![join streams based on "fx"](images/FlumeJoinStreams.png?raw=true "Title")
+![join streams based on "fx"](https://github.com/zBrainiac/Streaming/blob/master/Images/FlumeJoinStreams.png?raw=true "Title")
 
 
 Merged result:
