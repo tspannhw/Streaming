@@ -6,7 +6,9 @@
 
 
 ### Use cases:  
-#### Merge two data steams (trx get latest fx rate):  
+#### Merge two data steams - trx with the latest fx rate:  
+
+![join streams based on "fx"](images/FlumeJoinStreams.png?raw=true "Title")
 
 
 Merged result:
@@ -57,11 +59,11 @@ bin/kafka-server-start.sh config/server.properties
 The project provides two test-data generators:  
 - KafkaJsonProducer_trx - generating fake Credit Card Transaction  
 ```
-{"timestamp":1565604389166,"shop_id":0,"shop_name":"Ums Eck","cc_type":"Revolut","cc_id":"5179-5212-9764-8013","amount_orig":75.86,"fx":"CHF","fx_account":"CHF"}
+{"timestamp":1565604610745,"shop_id":4,"shop_name":"Ums Eck","cc_type":"Visa","cc_id":"cc_id":"5130-2220-4900-6727","amount_orig":86.82,"fx":"EUR","fx_account":"CHF"}
 ```  
 - KafkaJsonProducer_fx - generating fake Foreign Exchange Rates for some currencies  
 ```  
-{"timestamp":1565604494202,"fx":"EUR","fx_rate":1.01}
+{"timestamp":1565604610729,"fx":"EUR","fx_rate":0.91}
 ```
 
 
