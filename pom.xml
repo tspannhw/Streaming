@@ -46,7 +46,6 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_${scala.version}</artifactId>
-            <artifactId>kafka_${scala.version}</artifactId>
             <version>2.3.0</version>
         </dependency>
         <dependency>
@@ -139,17 +138,16 @@
             <artifactId>flink-table</artifactId>
             <version>${flink.version}</version>
             <type>pom</type>
-            <scope>provided</scope>
-        </dependency>
+            <scope>provided</scope></dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-table -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table_${scala.version}</artifactId>
             <version>1.7.2</version>
-            <scope>provided</scope>
-        </dependency>
+                   <scope>provided</scope>
+               </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-table-common -->
+               <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-table-common -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-common</artifactId>
