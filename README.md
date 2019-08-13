@@ -1,6 +1,10 @@
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=zBrainiac_Streaming)](https://sonarcloud.io/dashboard?id=zBrainiac_Streaming)
 # Streaming
 
 ## Concept:  
+
+
+
 ### Use cases:  
 #### Merge two data steams (trx get latest fx rate):  
 
@@ -30,7 +34,24 @@ Merged result:
 
 
 ## Test setup:
+All test can run on a localhost
 
+### Requirements:  
+- local installation of the latest Apache Kafka (e.g. on infra/kafka_2.12-2.3.0)
+- up-to-date IDE such as Intellij IDEA
+
+### Test Environment:  
+```
+cd /Users/xxx/infra/kafka_2.12-2.3.0  
+bin/zookeeper-server-start.sh config/zookeeper.properties  
+bin/kafka-server-start.sh config/server.properties  
+
+
+./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic trx &&  
+./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic fx &&  
+./bin/kafka-topics.sh --list --bootstrap-server localhost:9092 &&  
+./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic fx
+``` 
 
 ### Test Data Generator:
 The project provides two test-data generators:  
@@ -43,15 +64,4 @@ The project provides two test-data generators:
 {"timestamp":1565604494202,"fx":"EUR","fx_rate":1.01}
 ```
 
-### Test Environment:  
-```
-cd /Users/mdaeppen/infra/kafka_2.12-2.3.0  
-bin/zookeeper-server-start.sh config/zookeeper.properties  
-bin/kafka-server-start.sh config/server.properties  
 
-
-./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic trx &&  
-./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic fx &&  
-./bin/kafka-topics.sh --list --bootstrap-server localhost:9092 &&  
-./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic fx
-```
