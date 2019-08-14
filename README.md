@@ -33,6 +33,7 @@ Merged result:
 ```
 
 #### Aggregation on continuous data stream:  
+![join streams based on "fx"](https://github.com/zBrainiac/Streaming/blob/master/Images/FlumeAggStreams.png?raw=true "Title")
 
 
 ## Test setup:
@@ -52,20 +53,24 @@ bin/kafka-server-start.sh config/server.properties
 ./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic trx &&  
 ./bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic fx &&  
 ./bin/kafka-topics.sh --list --bootstrap-server localhost:9092 &&  
+./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic trx
 ./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic fx
+./bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic topic1
 ``` 
 
 ### Test Data Generator:
 The project provides two test-data generators:  
-- KafkaJsonProducer_trx - generating fake Credit Card Transaction  
+- KafkaJsonProducer_trx - generating fake Credit Card Transaction and publishing the JSON string on Kafka / topic = trx 
 - run with: java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_trx  
 ```
+sample trx json:
 {"timestamp":1565604610745,"shop_id":4,"shop_name":"Ums Eck","cc_type":"Visa","cc_id":"cc_id":"5130-2220-4900-6727","amount_orig":86.82,"fx":"EUR","fx_account":"CHF"}
 ```  
-- KafkaJsonProducer_fx - generating fake Foreign Exchange Rates for some currencies  
+- KafkaJsonProducer_fx - generating fake Foreign Exchange Rates for some currencies and publishing the JSON string on Kafka / topic = trx 
 - run with: java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_fx  
 
 ```  
+sample fx json:
 {"timestamp":1565604610729,"fx":"EUR","fx_rate":0.91}
 ```
 
