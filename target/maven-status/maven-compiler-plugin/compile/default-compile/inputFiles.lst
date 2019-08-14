@@ -1,0 +1,10 @@
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/util/SensorSource.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaJoin2JsonStreams.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaCount_trx_per_shop.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/util/SensorTimeAssigner.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/test_1.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/test_2.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/util/SensorReading.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/commons/Commons.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/producer/KafkaJsonProducer_trx.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/producer/KafkaJsonProducer_fx.java

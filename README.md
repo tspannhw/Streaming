@@ -58,10 +58,13 @@ bin/kafka-server-start.sh config/server.properties
 ### Test Data Generator:
 The project provides two test-data generators:  
 - KafkaJsonProducer_trx - generating fake Credit Card Transaction  
+- run with: java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_trx  
 ```
 {"timestamp":1565604610745,"shop_id":4,"shop_name":"Ums Eck","cc_type":"Visa","cc_id":"cc_id":"5130-2220-4900-6727","amount_orig":86.82,"fx":"EUR","fx_account":"CHF"}
 ```  
 - KafkaJsonProducer_fx - generating fake Foreign Exchange Rates for some currencies  
+- run with: java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_fx  
+
 ```  
 {"timestamp":1565604610729,"fx":"EUR","fx_rate":0.91}
 ```

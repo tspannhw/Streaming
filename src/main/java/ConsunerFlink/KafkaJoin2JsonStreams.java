@@ -40,8 +40,8 @@ public class KafkaJoin2JsonStreams {
 
         final ParameterTool parameterTool = ParameterTool.fromArgs(args);
 
-        //createRemoteEnvironment(String host, int port, String... jarFiles)
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        // set up the streaming execution environment
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         env.getConfig().setGlobalJobParameters(parameterTool);
 
