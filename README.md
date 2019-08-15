@@ -74,13 +74,17 @@ bin/kafka-server-start.sh config/server.properties
 ### Test Data Generator:
 The project provides two test-data generators:  
 - KafkaJsonProducer_trx - generating fake Credit Card Transaction and publishing the JSON string on Kafka / topic = trx 
-- run with: java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_trx  
+- run with: 
+$ java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_trx  
+$ java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_trx 10 (= 10 sleep time in ms between the messages | default 1'000 ms)  
 ```
 sample trx json:
 {"timestamp":1565604610745,"shop_id":4,"shop_name":"Ums Eck","cc_type":"Visa","cc_id":"cc_id":"5130-2220-4900-6727","amount_orig":86.82,"fx":"EUR","fx_account":"CHF"}
 ```  
 - KafkaJsonProducer_fx - generating fake Foreign Exchange Rates for some currencies and publishing the JSON string on Kafka / topic = trx 
-- run with: java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_fx  
+- run with:  
+$ java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_fx  or  
+$ java -classpath streaming-1.0-SNAPSHOT-jar-with-dependencies.jar producer.KafkaJsonProducer_fx 10 (= 10 sleep time in ms between the messages | default 1'000 ms)  
 
 ```  
 sample fx json:

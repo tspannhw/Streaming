@@ -38,7 +38,7 @@ import java.util.Properties;
 public class KafkaJoin2JsonStreams {
     public static void main(String[] args) throws Exception {
 
-        final ParameterTool parameterTool = ParameterTool.fromArgs(args);
+        ParameterTool parameterTool = ParameterTool.fromArgs(args);
 
         // set up the streaming execution environment
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();

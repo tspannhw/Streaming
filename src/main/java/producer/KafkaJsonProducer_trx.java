@@ -25,12 +25,27 @@ public class KafkaJsonProducer_trx {
     private static final List<String> shop_list = unmodifiableList(Arrays.asList(
             "Tante_Emma", "Aus_der_Region", "Shop_am_Eck", "SihlCity", "BioMarkt"));
 
+    public static long sleeptime;
+
+
     public static void main(String[] args) throws Exception {
+
+
+        if( args.length > 0 ) {
+            setsleeptime(Long.parseLong(args[0]));
+            System.out.println("sleeptime: " + sleeptime);
+        } else {
+            System.out.println("no sleeptime defined - use default");
+            setsleeptime(1000);
+            System.out.println("default sleeptime: " + sleeptime);
+        }
+
         Producer<String, byte[]> producer = createProducer();
         try {
             for (int i = 0; i < 1000000; i++) {
                 publishMessage(producer);
-                Thread.sleep(random.nextInt(5000));
+                Thread.sleep(sleeptime);
+                System.out.println("used sleeptime: " + sleeptime);
             }
         } finally {
             producer.close();
@@ -71,6 +86,10 @@ public class KafkaJsonProducer_trx {
         report.put("fx", transaction_currency_list.get(random.nextInt(transaction_currency_list.size())));
         report.put("fx_account", transaction_currency_list.get(random.nextInt(transaction_currency_list.size())));
         return report;
+    }
+
+    public static void setsleeptime(long sleeptime) {
+        KafkaJsonProducer_trx.sleeptime = sleeptime;
     }
 
 }

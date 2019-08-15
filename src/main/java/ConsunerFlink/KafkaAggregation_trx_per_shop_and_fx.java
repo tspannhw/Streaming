@@ -5,11 +5,12 @@ import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
-import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JsonNode;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.util.Collector;
@@ -31,7 +32,7 @@ import commons.Commons;
  * @version 2019/08/12 12:14
  */
 @Slf4j
-public class KafkaCount_trx_per_shop {
+public class KafkaAggregation_trx_per_shop_and_fx {
     public static void main(String[] args) throws Exception {
 
         // set up the streaming execution environment
@@ -48,24 +49,24 @@ public class KafkaCount_trx_per_shop {
         DataStream<String> trxStream = env.addSource(
                 new FlinkKafkaConsumer<>("trx", new SimpleStringSchema(), properties));
 
-
-        DataStream<Tuple2<String, Integer>> aggStream = trxStream
+/*
+        SingleOutputStreamOperator<Tuple3<String, String, Integer>> aggStream = trxStream
                 .flatMap(new SelectShopAndTokenizeFlatMap())
                 // group by words and sum their occurrences
-                .keyBy(0)
+                .keyBy(0, 1)
                 .sum(1);
 
 
         aggStream.print();
 
-
+*/
         // execute program
         JobExecutionResult result = env.execute("Streaming Kafka3");
         JobID jobId = result.getJobID();
         System.out.println("jobId=" + jobId);
     }
-
-    public static class SelectShopAndTokenizeFlatMap implements FlatMapFunction<String, Tuple2<String, Integer>> {
+/*
+    public static class SelectShopAndTokenizeFlatMap implements FlatMapFunction<String, Tuple3<String, String, Integer>> {
         private static final long serialVersionUID = 1L;
 
         private transient ObjectMapper jsonParser;
@@ -73,18 +74,20 @@ public class KafkaCount_trx_per_shop {
         /**
          * Select the shop name from the incoming JSON text.
          */
-        @Override
-        public void flatMap(String value, Collector<Tuple2<String, Integer>> out) throws Exception {
+ /*       @Override
+        public void flatMap(String value, Collector<Tuple3<String, String, Integer>> out) throws Exception {
             if (jsonParser == null) {
                 jsonParser = new ObjectMapper();
             }
             JsonNode jsonNode = jsonParser.readValue(value, JsonNode.class);
 
             // message of tweet
-            StringTokenizer tokenizer = new StringTokenizer(jsonNode.get("shop_name").asText());
-            String result = tokenizer.nextToken().replaceAll("\\s*", "").toLowerCase();
-            out.collect(new Tuple2<>(result, 1));
+            StringTokenizer tokenizerShopName = new StringTokenizer(jsonNode.get("shop_name").asText());
+            StringTokenizer test = new StringTokenizer(jsonNode.get("fx").asText());
+            String result = tokenizerShopName.nextToken().replaceAll("\\s*", "").toLowerCase();
+            out.collect(new Tuple3<String, String, Integer>(result, 1, 2,));
 
         }
     }
+    */
 }

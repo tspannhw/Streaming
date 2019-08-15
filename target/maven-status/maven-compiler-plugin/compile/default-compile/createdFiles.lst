@@ -14,4 +14,5 @@ ConsunerFlink/KafkaJoin2JsonStreams.class
 ConsunerFlink/test_2$TemperatureAverager.class
 ConsunerFlink/KafkaCount_trx_per_shop$SelectShopAndTokenizeFlatMap.class
 ConsunerFlink/KafkaJoin2JsonStreams$EqualKeySelector.class
+ConsunerFlink/KafkaAggregation_trx_per_shop_and_fx.class
 util/SensorTimeAssigner.class
