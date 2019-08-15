@@ -1,4 +1,5 @@
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=zBrainiac_Streaming)](https://sonarcloud.io/dashboard?id=zBrainiac_Streaming)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=zBrainiac_Streaming)](https://sonarcloud.io/dashboard?id=zBrainiac_Streaming) & 
+[![Build Status](https://travis-ci.org/zBrainiac/Streaming.svg?branch=master)](https://travis-ci.org/zBrainiac/Streaming)
 # Streaming
 
 ## Concept:  
@@ -33,9 +34,21 @@ Merged result:
 ```
 
 #### Aggregation on continuous data stream:  
+- parse JSON
+- get value form 'Shop_Name' as key (keyBy)
+- aggregation (sum) on 'Shop_Name' 
+
 ![join streams based on "fx"](https://github.com/zBrainiac/Streaming/blob/master/Images/FlumeAggStreams.png?raw=true "Title")
 
-
+```
+Code:
+DataStream<Tuple2<String, Integer>> aggStream = trxStream
+   .flatMap(new SelectShopAndTokenizeFlatMap())
+   // group by words and sum their occurrences
+   .keyBy(0)
+   .sum(1);
+``` 
+ 
 ## Test setup:
 All test can run on a localhost
 
