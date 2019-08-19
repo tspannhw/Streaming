@@ -1,5 +1,6 @@
 package ConsunerFlink;
 
+import commons.Commons;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
@@ -16,9 +17,6 @@ import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 
 import java.util.Properties;
-import java.util.StringTokenizer;
-
-import commons.Commons;
 
 
 /**
