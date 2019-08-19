@@ -51,7 +51,7 @@ public class KafkaCount_trx_per_shop {
 
         DataStream<Tuple2<String, Integer>> aggStream = trxStream
                 .flatMap(new SelectShopAndTokenizeFlatMap())
-                // group by words and sum their occurrences
+                // group by shop_name and sum their occurrences
                 .keyBy(0)
                 .sum(1);
 
@@ -66,8 +66,6 @@ public class KafkaCount_trx_per_shop {
     }
 
     public static class SelectShopAndTokenizeFlatMap implements FlatMapFunction<String, Tuple2<String, Integer>> {
-        private static final long serialVersionUID = 1L;
-
         private transient ObjectMapper jsonParser;
 
         /**
@@ -80,11 +78,9 @@ public class KafkaCount_trx_per_shop {
             }
             JsonNode jsonNode = jsonParser.readValue(value, JsonNode.class);
 
-            // message of tweet
-            StringTokenizer tokenizer = new StringTokenizer(jsonNode.get("shop_name").asText());
-            String result = tokenizer.nextToken().replaceAll("\\s*", "").toLowerCase();
-            out.collect(new Tuple2<>(result, 1));
-
+            // get shop_name from JSONObject
+            String shop_name = jsonNode.get("shop_name").toString();
+            out.collect(new Tuple2<>(shop_name, 1));
         }
     }
 }

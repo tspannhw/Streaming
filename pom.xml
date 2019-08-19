@@ -254,6 +254,10 @@
                                         <Main-Class>org.marcel.kafka.cli.Main</Main-Class>
                                     </manifestEntries>
                                 </transformer>
+<!--                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <Main-Class>com.sf.bdp.flink.table.StreamTable.kafka.StreamKafka08JsonTableSource</Main-Class>
+                                </transformer> -->
                             </transformers>
                         </configuration>
                     </execution>
