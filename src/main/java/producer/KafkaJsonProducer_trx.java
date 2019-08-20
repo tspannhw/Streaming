@@ -45,7 +45,7 @@ public class KafkaJsonProducer_trx {
             for (int i = 0; i < 1000000; i++) {
                 publishMessage(producer);
                 Thread.sleep(sleeptime);
-                System.out.println("used sleeptime: " + sleeptime);
+ //               System.out.println("used sleeptime: " + sleeptime);
             }
         } finally {
             producer.close();

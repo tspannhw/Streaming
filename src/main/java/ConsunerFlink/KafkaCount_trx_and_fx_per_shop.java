@@ -48,7 +48,7 @@ public class KafkaCount_trx_and_fx_per_shop {
 
 
         DataStream<Tuple3<String, String, Integer>> aggStream = trxStream
-                .flatMap(new SelectShopAndTokenizeFlatMap())
+                .flatMap(new JSONDeserializer())
                 // group by shop_name AND fx and sum their occurrences
                 .keyBy(0, 1)
                 .sum(2);
@@ -63,7 +63,7 @@ public class KafkaCount_trx_and_fx_per_shop {
         System.out.println("jobId=" + jobId);
     }
 
-    public static class SelectShopAndTokenizeFlatMap implements FlatMapFunction<String, Tuple3<String, String, Integer>> {
+    public static class JSONDeserializer implements FlatMapFunction<String, Tuple3<String, String, Integer>> {
         private static final long serialVersionUID = 1L;
 
         private transient ObjectMapper jsonParser;
