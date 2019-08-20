@@ -1,10 +1,10 @@
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaJoin2JsonStreams.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/producer/test_1.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaCount_trx_per_shop.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaSum_over_shopName_and_fx.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaStream2FlinkTable.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaCount_trx_and_fx_per_shop.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/join_test1.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/commons/Commons.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/producer/KafkaJsonProducer_trx.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/producer/KafkaJsonProducer_fx.java
-/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/test1.java
