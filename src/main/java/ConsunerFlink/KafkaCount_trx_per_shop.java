@@ -1,6 +1,7 @@
 package ConsunerFlink;
 
 import commons.Commons;
+import commons.serializeTuple2toString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
@@ -13,6 +14,7 @@ import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 
@@ -46,23 +48,29 @@ public class KafkaCount_trx_per_shop {
         DataStream<String> trxStream = env.addSource(
                 new FlinkKafkaConsumer<>("trx", new SimpleStringSchema(), properties));
 
+//        trxStream.print();
 
-        DataStream<Tuple2<String, Integer>> aggStream = trxStream
-                .flatMap(new JSONDeserializer())
+        DataStream <Tuple2<String, Integer>> aggStream = trxStream
+                .flatMap(new trxJSONDeserializer())
                 // group by shop_name and sum their occurrences
                 .keyBy(0)
                 .sum(1);
 
-
         aggStream.print();
 
+        // write the aggregated data stream to a Kafka sink
+        aggStream.addSink(new FlinkKafkaProducer<>(
+                Commons.EXAMPLE_KAFKA_SERVER,
+                "CountTrxPerShop",
+                new serializeTuple2toString()));
 
         // execute program
-        JobExecutionResult result = env.execute("Streaming Kafka3");
+        JobExecutionResult result = env.execute("Streaming Kafka");
         JobID jobId = result.getJobID();
     }
 
-    public static class JSONDeserializer implements FlatMapFunction<String, Tuple2<String, Integer>> {
+
+    public static class trxJSONDeserializer implements FlatMapFunction<String, Tuple2<String, Integer>> {
         private transient ObjectMapper jsonParser;
 
         /**
@@ -75,9 +83,10 @@ public class KafkaCount_trx_per_shop {
             }
             JsonNode jsonNode = jsonParser.readValue(value, JsonNode.class);
 
-            // get shop_name from JSONObject
+            // get shop_name AND fx from JSONObject
             String shop_name = jsonNode.get("shop_name").toString();
             out.collect(new Tuple2<>(shop_name, 1));
         }
     }
+
 }

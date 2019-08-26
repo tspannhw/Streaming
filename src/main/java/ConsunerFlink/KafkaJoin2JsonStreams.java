@@ -13,7 +13,7 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
@@ -53,13 +53,16 @@ public class KafkaJoin2JsonStreams {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 
         //it is necessary to use IngestionTime, not EventTime. during my running this program
-        env.setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
+        env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
         DataStream<String> trxStream = env.addSource(
                 new FlinkKafkaConsumer<>("trx", new SimpleStringSchema(), properties));
+
+        System.out.println("DataStream - trx");
 
         DataStream<String> fxStream = env.addSource(
                 new FlinkKafkaConsumer<>("fx", new SimpleStringSchema(), properties));
 
+        System.out.println("DataStream - fx");
 
         DataStream<JSONObject> trx =
                 trxStream.flatMap(new Tokenizer());
@@ -67,30 +70,31 @@ public class KafkaJoin2JsonStreams {
         DataStream<JSONObject> fx =
                 fxStream.flatMap(new Tokenizer());
 
+
         DataStream<String> joinedString = trx.join(fx)
                 .where(new NameKeySelector())
                 .equalTo(new EqualKeySelector())
-                .window(TumblingEventTimeWindows.of(Time.milliseconds(1000)))
+                .window(TumblingProcessingTimeWindows.of(Time.milliseconds(10000)))
                 .apply((JoinFunction<JSONObject, JSONObject, String>) (first, second) -> {
                     JSONObject joinJson = new JSONObject();
-                    joinJson.put(first.getString("cc_id"), first);
-                    joinJson.put(second.getString("fx"), second);
+                    joinJson.put("trx", first);
+                    joinJson.put("fx", second);
 
                     // for debugging: print out
-//                       System.out.println("first" + first);
-//                       System.out.println("second" + second);
+//                    System.out.println("trx data: " + first);
+//                    System.out.println("fx data: " + second);
                     return joinJson.toJSONString();
                 });
 
-// for debugging: print out
-//        joinedString.print();
+
         FlinkKafkaProducer<String> myProducer = new FlinkKafkaProducer<>(
                 Commons.EXAMPLE_KAFKA_SERVER,
-                "topic1",
+                "TrxFxCombined",
                 new SimpleStringSchema());
 
         myProducer.setWriteTimestampToKafka(true);
         joinedString.addSink(myProducer);
+
 
         // emit result
         if (parameterTool.has("output")) {
@@ -101,7 +105,7 @@ public class KafkaJoin2JsonStreams {
         }
 
         // execute program
-        JobExecutionResult result = env.execute("Streaming Kafka3");
+        JobExecutionResult result = env.execute("Streaming Kafka");
         JobID jobId = result.getJobID();
         System.out.println("jobId=" + jobId);
     }
@@ -123,9 +127,10 @@ public class KafkaJoin2JsonStreams {
     private static class NameKeySelector implements KeySelector<JSONObject, String> {
         @Override
         public String getKey(JSONObject value) {
-            final String str = (String) value.get("fx");
+            // select fx && fx_account from fxStream
+            final String str = (String) value.get("fx") + "_" + (String) value.get("fx_account");
 // for debugging: print out
-//            System.out.println(str);
+//            System.out.println("trx: " + str);
             return str;
         }
     }
@@ -133,9 +138,10 @@ public class KafkaJoin2JsonStreams {
     private static class EqualKeySelector implements KeySelector<JSONObject, String> {
         @Override
         public String getKey(JSONObject value) {
-            final String str = (String) value.get("fx");
+            // select fx && fx_target from fxStream
+            final String str = (String) value.get("fx") + "_" + (String) value.get("fx_target");
 // for debugging: print out
-//           System.out.println(str);
+//           System.out.println("fx: " + str);
             return str;
         }
     }

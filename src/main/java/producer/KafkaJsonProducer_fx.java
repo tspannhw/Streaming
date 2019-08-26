@@ -9,7 +9,6 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.*;
 
-import static java.util.Collections.unmodifiableList;
 
 
 public class KafkaJsonProducer_fx {
@@ -17,8 +16,7 @@ public class KafkaJsonProducer_fx {
     private static final String TOPIC = "fx";
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Random random = new Random();
-    private static final List<String> transaction_currency_list = unmodifiableList(Arrays.asList(
-            "USD", "EUR", "CHF"));
+
 
     public static long sleeptime;
 
@@ -38,7 +36,7 @@ public class KafkaJsonProducer_fx {
             for (int i = 0; i < 1000000; i++) {
                 publishMessage(producer);
                 Thread.sleep(sleeptime);
-                System.out.println("used sleeptime: " + sleeptime);
+//                System.out.println("used sleeptime: " + sleeptime);
 
             }
         } finally {
@@ -70,14 +68,67 @@ public class KafkaJsonProducer_fx {
 
     // build random json object
     private static ObjectNode JsonOnject() {
+
+        int i= random.nextInt(8);
+
         ObjectNode report = objectMapper.createObjectNode();
         report.put("timestamp", System.currentTimeMillis());
-        report.put("fx", transaction_currency_list.get(random.nextInt(transaction_currency_list.size())));
-        report.put("fx_rate", (random.nextInt(20) + 90) / 100.0);
+
+        switch (i) {
+            case 0:
+                report.put("fx", "CHF");
+                report.put("fx_rate", 1.00);
+                report.put("fx_target", "CHF");
+                break;
+            case 1:
+                report.put("fx", "CHF");
+                report.put("fx_target", "USD");
+                report.put("fx_rate", (random.nextInt(20) + 90) / 100.0);
+                break;
+            case 2:
+                report.put("fx", "CHF");
+                report.put("fx_target", "EUR");
+                report.put("fx_rate", (random.nextInt(20) + 90) / 100.0);
+                break;
+            case 3:
+                report.put("fx", "EUR");
+                report.put("fx_rate", 1.00);
+                report.put("fx_target", "EUR");
+                break;
+            case 4:
+                report.put("fx", "EUR");
+                report.put("fx_target", "USD");
+                report.put("fx_rate", (random.nextInt(20) + 90) / 100.0);
+                break;
+            case 5:
+                report.put("fx", "EUR");
+                report.put("fx_target", "CHF");
+                report.put("fx_rate", (random.nextInt(20) + 90) / 100.0);
+                break;
+            case 6:
+                report.put("fx", "USD");
+                report.put("fx_rate", 1.00);
+                report.put("fx_target", "USD");
+                break;
+            case 7:
+                report.put("fx", "USD");
+                report.put("fx_target", "CHF");
+                report.put("fx_rate", (random.nextInt(20) + 90) / 100.0);
+                break;
+            case 8:
+                report.put("fx", "USD");
+                report.put("fx_target", "EUR");
+                report.put("fx_rate", (random.nextInt(20) + 90) / 100.0);
+                break;
+            default:
+                System.out.println("i out of range");
+
+        }
         return report;
     }
 
-    public static void setsleeptime(long sleeptime) {
+    private static void setsleeptime(long sleeptime) {
         KafkaJsonProducer_fx.sleeptime = sleeptime;
     }
+
 }

@@ -23,7 +23,7 @@ public class KafkaJsonProducer_trx {
             "USD", "EUR", "CHF"));
 
     private static final List<String> shop_list = unmodifiableList(Arrays.asList(
-            "Tante_Emma", "Aus_der_Region", "Shop_am_Eck", "SihlCity", "BioMarkt"));
+            ));
 
     public static long sleeptime;
 
@@ -76,15 +76,38 @@ public class KafkaJsonProducer_trx {
 
     // build random json object
     private static ObjectNode JsonOnject() {
+
+        int i= random.nextInt(5);
+
         ObjectNode report = objectMapper.createObjectNode();
         report.put("timestamp", System.currentTimeMillis());
-        report.put("shop_id", random.nextInt(5));
-        report.put("shop_name", shop_list.get(random.nextInt(shop_list.size())));
-        report.put("cc_type", transaction_card_type_list.get(random.nextInt(transaction_card_type_list.size())));
         report.put("cc_id", "51" + (random.nextInt(89) + 10) + "-" + (random.nextInt(8999) + 1000) + "-" + (random.nextInt(8999) + 1000) + "-" + (random.nextInt(8999) + 1000));
-        report.put("amount_orig", (random.nextInt(8900) + 10) / 100.0);
+        report.put("cc_type", transaction_card_type_list.get(random.nextInt(transaction_card_type_list.size())));
+        report.put("shop_id", i);
+
+        switch (i) {
+            case 0:
+                report.put("shop_name", "Tante_Emma" );
+                break;
+            case 1:
+                report.put("shop_name", "Aus_der_Region" );
+                break;
+            case 2:
+                report.put("shop_name", "Shop_am_Eck" );
+                break;
+            case 3:
+                report.put("shop_name", "SihlCity" );
+                break;
+            case 4:
+                report.put("shop_name", "BioMarkt" );
+                break;
+            default:
+                System.out.println("i out of range");
+        }
+
         report.put("fx", transaction_currency_list.get(random.nextInt(transaction_currency_list.size())));
         report.put("fx_account", transaction_currency_list.get(random.nextInt(transaction_currency_list.size())));
+        report.put("amount_orig", (random.nextInt(8900) + 10) / 100.0);
         return report;
     }
 

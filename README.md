@@ -3,51 +3,95 @@
 # Streaming
 
 ## Concept:  
+Presentation of streaming applications based on credit card transactions and FX rate stream
 
-
-
+![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/Overview.png?raw=true "Title")
+  
 ### Use cases:  
-#### Merge two data steams - trx with the latest fx rate:  
+#### Use case 1 - "count"
+Start small - counting transactions per shop (group by) 
 
-![join streams based on "fx"](https://github.com/zBrainiac/Streaming/blob/master/Images/FlumeJoinStreams.png?raw=true "Title")
+![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc1?raw=true "Title")
+ 
+class: KafkaCount_trx_per_shop  
+```
+DataStream <Tuple2<String, Integer>> aggStream = trxStream
+    .flatMap(new trxJSONDeserializer())
+    // group by shop_name and sum their occurrences
+    .keyBy(0)  // shop_name
+    .sum(1);
+```
+JSON input stream:
+```
+{"timestamp":1566829043004,"cc_id":"5123-5985-1943-6358","cc_type":"Maestro","shop_id":3,"shop_name":"SihlCity","fx":"USD","fx_account":"CHF","amount_orig":40.0}
+```
+
+JSON output stream:
+```
+{"SihlCity":83}
+```
+  
+#### Use case 2 - "sum"
+
+![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc2?raw=true "Title")
+
+class: KafkaSum_ccid_trx_fx  
+
+```
+DataStream <Tuple2<String, Integer>> aggStream = trxStream
+    .flatMap(new trxJSONDeserializer())
+    // group by "cc_id" AND "fx" and sum their occurrences
+    .keyBy(0, 1)  // shop_name
+    .sum(4);
+```
+JSON input stream:
+```
+{"timestamp":1566829043004,"cc_id":"5123-5985-1943-6358","cc_type":"Maestro","shop_id":3,"shop_name":"SihlCity","fx":"USD","fx_account":"CHF","amount_orig":40.0}
+```
+
+JSON output stream:
+```
+{"Maestro":"EUR":"USD":101.81}
+```
+  
+#### Use case 3 - "merge two streams"
+Merge two data steams - trx with the latest fx rate:  
+
+![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc3?raw=true "Title")
+
+JSON input stream:
+```
+{"timestamp":1566829043004,"cc_id":"5123-5985-1943-6358","cc_type":"Maestro","shop_id":3,"shop_name":"SihlCity","fx":"USD","fx_account":"CHF","amount_orig":40.0}
+{"timestamp":1566829830600,"fx":"USD","fx_target":"CHF","fx_rate":1.03}
+```
 
 
 Merged result:
 ```
 {
-   "5130-2220-4900-6727":{
-      "cc_type":"Visa",
-      "shop_id":4,
-      "fx":"EUR",
-      "amount_orig":86.82,
-      "fx_account":"CHF",
-      "cc_id":"5130-2220-4900-6727",
-      "shop_name":"Ums Eck",
-      "timestamp":1565604610745
+   "fx":{
+      "fx_target":"CHF",
+      "fx":"USD",
+      "fx_rate":1.03,
+      "timestamp":1566829830600
    },
-   "EUR":{
-      "fx":"EUR",
-      "fx_rate":0.91,
-      "timestamp":1565604610729
+   "trx":{
+      "cc_type":"SihlCity",
+      "shop_id":2,
+      "fx":"USD",
+      "amount_orig":40.00,
+      "fx_account":"CHF",
+      "cc_id":"5123-5985-1943-6358",
+      "shop_name":"SihlCity",
+      "timestamp":1566829043004
    }
 }
 ```
+  
+#### Use case 4 - FX Risk Calculation on historical data
 
-#### Aggregation on continuous data stream:  
-- parse JSON
-- get value form 'Shop_Name' as key (keyBy)
-- aggregation (sum) on 'Shop_Name' 
-
-![join streams based on "fx"](https://github.com/zBrainiac/Streaming/blob/master/Images/FlumeAggStreams.png?raw=true "Title")
-
-```
-Code:
-DataStream<Tuple2<String, Integer>> aggStream = trxStream
-   .flatMap(new SelectShopAndTokenizeFlatMap())
-   // group by words and sum their occurrences
-   .keyBy(0)
-   .sum(1);
-``` 
+![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc4?raw=true "Title")
+  
  
 ## Test setup:
 All test can run on a localhost
