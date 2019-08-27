@@ -70,7 +70,6 @@ public class KafkaJoin2JsonStreams {
         DataStream<JSONObject> fx =
                 fxStream.flatMap(new Tokenizer());
 
-
         DataStream<String> joinedString = trx.join(fx)
                 .where(new NameKeySelector())
                 .equalTo(new EqualKeySelector())

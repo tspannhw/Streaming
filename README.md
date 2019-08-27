@@ -11,7 +11,10 @@ Presentation of streaming applications based on credit card transactions and FX 
 #### Use case 1 - "count"
 Start small - counting transactions per shop (group by) 
 
-![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc1.png?raw=true "Title")
+![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc1.png?raw=true "Title")  
+
+logical dataflow:  
+![logical dataflow](https://github.com/zBrainiac/Streaming/blob/master/Images/uc1_dataflow.png?raw=true "Title")  
  
 class: KafkaCount_trx_per_shop  
 ```
@@ -33,7 +36,10 @@ JSON output stream:
   
 #### Use case 2 - "sum"
 
-![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc2.png?raw=true "Title")
+![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc2.png?raw=true "Title")  
+
+logical dataflow:  
+![logical dataflow](https://github.com/zBrainiac/Streaming/blob/master/Images/uc2_dataflow.png?raw=true "Title")
 
 class: KafkaSum_ccid_trx_fx  
 
@@ -57,7 +63,10 @@ JSON output stream:
 #### Use case 3 - "merge two streams"
 Merge two data steams - trx with the latest fx rate:  
 
-![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc3.png?raw=true "Title")
+![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc3.png?raw=true "Title")  
+
+logical dataflow:  
+![logical dataflow](https://github.com/zBrainiac/Streaming/blob/master/Images/uc3_dataflow.png?raw=true "Title")
 
 JSON input stream:
 ```
