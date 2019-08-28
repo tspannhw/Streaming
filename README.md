@@ -123,7 +123,24 @@ Merged result:
  {"5125-6782-8503-3405"_"CHF"_"CHF"_54.8:2}
  ```
  
- 
+#### Use case 6 - "check on fraud"  
+Keep "cc_id" in a window for {30 sec} and count transaction >= 40.00  
+Filter out if the "cc_id" is unique within the window - if  not send alarm event  
+
+![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc6.png?raw=true "Title")  
+
+logical dataflow:  
+![logical dataflow](https://github.com/zBrainiac/Streaming/blob/master/Images/uc6_dataflow.png?raw=true "Title")
+  
+JSON input stream:
+```
+{"timestamp":1566829043004,"cc_id":"5123-5985-1943-6358","cc_type":"Maestro","shop_id":3,"shop_name":"SihlCity","fx":"USD","fx_account":"CHF","amount_orig":40.0}
+```
+  
+Alarm in case of a duplicated cc trx  
+```
+{"5155-9621-5112-8965":6}
+```
  
 ## Test setup:
 All test can run on a localhost

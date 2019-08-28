@@ -1,5 +1,6 @@
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaTrxFxRiskCalculator.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaTrxDuplicateChecker.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaCCTRX_fraud.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/commons/serializeTuple2toString.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/commons/fxJSONDeserializer.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/inprocess/KafkaStream2FlinkTable.java
