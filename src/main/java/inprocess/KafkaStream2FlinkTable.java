@@ -1,20 +1,22 @@
 package inprocess;
 
 import commons.Commons;
-import commons.fxJSONDeserializer;
-import commons.trxJSONDeserializer;
+import commons.trxfxJSONDeserializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
-import org.apache.flink.api.java.tuple.Tuple4;
-import org.apache.flink.api.java.tuple.Tuple9;
+import org.apache.flink.api.common.typeinfo.Types;
+import org.apache.flink.api.java.tuple.Tuple11;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.java.StreamTableEnvironment;
+import org.apache.flink.table.descriptors.Json;
+import org.apache.flink.table.descriptors.Kafka;
+import org.apache.flink.table.descriptors.Schema;
 import org.apache.flink.types.Row;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 
@@ -28,7 +30,7 @@ import java.util.Properties;
  * Aggregation on "shop_name" & "fx"
  *
  * @author Marcel Daeppen
- * @version 2019/08/19 11:08
+ * @version 2019/08/26 16:08
  */
 @Slf4j
 public class KafkaStream2FlinkTable {
@@ -48,42 +50,45 @@ public class KafkaStream2FlinkTable {
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 
-        DataStream<String> trxStream = env.addSource(
-                new FlinkKafkaConsumer<>("trx", new SimpleStringSchema(), properties));
+        DataStream<String> trxfxStream = env.addSource(
+                new FlinkKafkaConsumer<>("TrxFxCombined", new SimpleStringSchema(), properties));
 
-        DataStream<String> fxStream = env.addSource(
-                new FlinkKafkaConsumer<>("fx", new SimpleStringSchema(), properties));
+        trxfxStream.print();
 
-        DataStream<Tuple9<Long, Integer, String, String, String, Double, String, String, Integer>> trxDeserializer = trxStream
-                .flatMap(new trxJSONDeserializer());
+        DataStream<Tuple11<Long, Integer, String, String, String, Double, String, String, Integer, Double, Long>> trxfxDeserializer = trxfxStream
+                .flatMap(new trxfxJSONDeserializer());
 
-        DataStream<Tuple4<Long, String, Double, String>> fxDeserializer = fxStream
-                .flatMap(new fxJSONDeserializer());
+        trxfxDeserializer.print();
 
+        tableEnv.registerDataStream("trxfxTable", trxfxDeserializer, "trx_timestamp, shop_id, shop_name, cc_type, cc_id, amount_orig, fx, fx_account, count, fx_rate, fx_timestamp");
 
-        tableEnv.registerDataStream("trxTable", trxDeserializer, "trx_timestamp, shop_id, shop_name, cc_type, cc_id, amount_orig, fx, fx_account");
+        // dump
+        Table sum1TrxFxTable = tableEnv.sqlQuery(
+                "SELECT * FROM trxfxTable");
+        sum1TrxFxTable.printSchema();
+        tableEnv.toRetractStream(sum1TrxFxTable, Row.class).print();
 
-        tableEnv.registerDataStream("fxTable", fxDeserializer, "fx_timestamp, fx_org, fx_rate, fx_target");
-
-        // count
-        Table cntTrxTable = tableEnv.sqlQuery(
-                "SELECT count(*) FROM trxTable ");
-        cntTrxTable.printSchema();
-//        tableEnv.toRetractStream(cntTrxTable, Row.class).print();
-
-
-        Table cntFxTable = tableEnv.sqlQuery(
-                "SELECT count(*) FROM fxTable ");
-        cntFxTable.printSchema();
-//        tableEnv.toRetractStream(cntFxTable, Row.class).print();
-
-        // join
-        Table join = tableEnv.sqlQuery(
-                "SELECT * FROM trxTable INNER JOIN fxTable ON trxTable.fx = fxTable.fx_org AND trxTable.fx_account = fxTable.fx_target");
-
-        join.printSchema();
-        tableEnv.toRetractStream(join, Row.class).print();
-
+        tableEnv
+                .connect(
+                        new Kafka()
+                                .version("0.11")
+                                .topic("sum1TrxFxTable")
+                                .property("bootstrap.servers", "localhost:9092")
+                )
+                .withFormat(
+                        new Json()
+                        .failOnMissingField(false)
+                        .deriveSchema()
+                )
+                // declare the schema of the table
+                .withSchema(
+                        new Schema()
+                                .field("trx_timestamp", Types.LONG)     // required: specify the fields of the table (in this order)
+                                .field("shop_name", Types.STRING)
+                                .field("cc_type", Types.STRING)
+                )
+                .inRetractMode()
+                .registerTableSource("sum1TrxFxTable");
 
 
         // execute program

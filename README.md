@@ -102,6 +102,29 @@ Merged result:
 ![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc4.png?raw=true "Title")
 
  
+ 
+ 
+ #### Use case 5 - "check on duplicated cc trx within in a window"  
+ build fingerprint of the "cc transaction" stream, keep fingerprint in a window for {30 sec}.  
+ filter out if the fingerprint is unique within the window - if the fingerprint occurs several times send alarm event  
+ 
+ ![overview](https://github.com/zBrainiac/Streaming/blob/master/Images/uc5.png?raw=true "Title")  
+ 
+ logical dataflow:  
+ ![logical dataflow](https://github.com/zBrainiac/Streaming/blob/master/Images/uc5_dataflow.png?raw=true "Title")
+ 
+ JSON input stream:
+ ```
+ {"timestamp":1566829043004,"cc_id":"5123-5985-1943-6358","cc_type":"Maestro","shop_id":3,"shop_name":"SihlCity","fx":"USD","fx_account":"CHF","amount_orig":40.0}
+ ```
+ 
+ Alarm in case of a duplicated cc trx  
+  ```
+ {"5125-6782-8503-3405"_"CHF"_"CHF"_54.8:2}
+ ```
+ 
+ 
+ 
 ## Test setup:
 All test can run on a localhost
 

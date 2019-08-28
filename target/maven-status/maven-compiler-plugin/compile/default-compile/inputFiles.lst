@@ -1,5 +1,5 @@
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaTrxFxRiskCalculator.java
-/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/inprocess/KafkaSum_over_shopName_and_fx.java
+/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaTrxDuplicateChecker.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/commons/serializeTuple2toString.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/commons/fxJSONDeserializer.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/inprocess/KafkaStream2FlinkTable.java
@@ -8,9 +8,7 @@
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaJoin2JsonStreams.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/ConsunerFlink/KafkaCount_trx_per_shop.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/commons/serializeTuple5toString.java
-/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/inprocess/join_test1.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/commons/Commons.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/producer/KafkaJsonProducer_trx.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/producer/KafkaJsonProducer_fx.java
 /Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/commons/trxJSONDeserializer.java
-/Users/mdaeppen/GoogleDrive/workspace/Streaming/src/main/java/inprocess/KafkaJoinFXRiskExposing.java
