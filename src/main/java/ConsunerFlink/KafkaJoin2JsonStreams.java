@@ -28,7 +28,6 @@ import java.util.Properties;
  * fxStream: {"timestamp":1565604494202,"fx":"EUR","fx_rate":1.01}
  * <p>
  * DataStream<String> joinedString = trx.join(fx)
- * kafka: topic1
  * {"EUR":{"fx":"EUR","fx_rate":0.9,"timestamp":1565604610729},"5130-2220-4900-6727":{"cc_type":"Visa","shop_id":4,"fx":"EUR","amount_orig":86.82,"fx_account":"EUR","cc_id":"5130-2220-4900-6727","shop_name":"Ums Eck","timestamp":1565604610745}}
  *
  * @author Marcel Daeppen
