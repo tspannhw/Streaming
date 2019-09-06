@@ -33,11 +33,11 @@ public class KafkaJsonProducer_trx {
 
         if( args.length > 0 ) {
             setsleeptime(Long.parseLong(args[0]));
-            System.out.println("sleeptime: " + sleeptime);
+            System.out.println("sleeptime (ms): " + sleeptime);
         } else {
             System.out.println("no sleeptime defined - use default");
             setsleeptime(1000);
-            System.out.println("default sleeptime: " + sleeptime);
+            System.out.println("default sleeptime (ms): " + sleeptime);
         }
 
         Producer<String, byte[]> producer = createProducer();
