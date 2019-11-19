@@ -22,8 +22,8 @@ import java.util.Properties;
 
 
 /**
- * className: ConsunerFlink.KafkaJoin2JsonStreams
- * trxStream: {"timestamp":1565604389166,"shop_name":0,"shop_name":"Ums Eck","cc_type":"Revolut","cc_id":"5179-5212-9764-8013","amount_orig":75.86,"fx":"CHF","fx_account":"CHF"}
+ * className: ConsunerFlink.UC1_KafkaCount_trx_per_shop
+ * trxStream: {"timestamp":1574168164819,"cc_id":"5188-1636-7534-2496","cc_type":"Visa","shop_id":4,"shop_name":"BioMarkt","fx":"EUR","fx_account":"CHF","amount_orig":59.09}
  * <p>
  * Aggregation on "shop_name"
  *
@@ -61,7 +61,7 @@ public class UC1_KafkaCount_trx_per_shop {
         // write the aggregated data stream to a Kafka sink
         aggStream.addSink(new FlinkKafkaProducer<>(
                 Commons.EXAMPLE_KAFKA_SERVER,
-                "CountTrxPerShop",
+                "result",
                 new serializeTuple2toString()));
 
         // execute program

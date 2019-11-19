@@ -62,7 +62,7 @@ public class UC2_KafkaSum_ccTyp_trx_fx {
         // write the aggregated data stream to a Kafka sink
         aggStream.addSink(new FlinkKafkaProducer<>(
                 Commons.EXAMPLE_KAFKA_SERVER,
-                "SumCcTypFxAmt",
+                "result",
                 new serializeTuple5toString()));
 
         // execute program

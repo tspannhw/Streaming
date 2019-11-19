@@ -64,7 +64,7 @@ public class UC6_KafkaCCTRX_fraud {
                 .filter(new FilterFunction<Tuple3<String, Double, Integer>>() {
                     @Override
                     public boolean filter(Tuple3<String, Double, Integer> value) throws Exception {
-                        return value.f1 >= 40 && value.f2 != 1;
+                        return value.f1 >= 10 && value.f2 != 1;
                     }
                 });
 
